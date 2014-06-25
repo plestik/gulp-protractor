@@ -15,24 +15,10 @@ function getProtractorDir() {
 		return protractorDir;
 	}
 	
-	// how deep are we wrt filesystem root?
-	var cwd = path.resolve(".");
-	var depth = /^win/.test(process.platform) ? cwd.match(/\\/g).length :  cwd.match(/\//g).length;
-	depth = depth - 1;
+	protractorDir = require.resolve('protractor');
+	protractorDir = path.normalize(path.dirname(protractorDir + '/../../../../') + '/.bin');
 	
-	var result = __dirname + "/node_modules";
-	var count = 0;
-	while (count <= depth)
-	{
-		if (fs.existsSync(path.resolve(result + "/.bin/protractor")))
-		{
-			protractorDir = result + "/.bin";
-			return path.normalize(protractorDir);
-		}
-		result = "../" + result;
-		count++;
-	}
-	throw new Error("No protractor installation found.");	
+	return protractorDir;
 }
 
 var protractor = function(options) {
